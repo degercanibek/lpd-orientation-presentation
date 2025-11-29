@@ -345,6 +345,41 @@
             text-align: center;
         }
 
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 2001;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-arrow:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.left {
+            left: 30px;
+        }
+
+        .nav-arrow.right {
+            right: 30px;
+        }
+
+        .nav-arrow svg {
+            width: 24px;
+            height: 24px;
+        }
+
         .navigation-area {
             position: fixed;
             top: 0;
@@ -367,6 +402,79 @@
         .nav-left:hover, .nav-right:hover {
             background: rgba(0,0,0,0.02);
         }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            h1 { font-size: 48px; }
+            h2 { font-size: 36px; }
+            h3 { font-size: 24px; }
+            .subtitle { font-size: 28px; }
+            .card p, .card ul, .product-card p { font-size: 18px; }
+            .comparison-item p { font-size: 20px; }
+            .role-item { font-size: 22px; }
+            .portfolio-number { font-size: 60px; }
+            .portfolio-label { font-size: 20px; }
+        }
+
+        @media (max-width: 992px) {
+            body { padding: 20px; }
+            .slide {
+                width: calc(100vw - 40px);
+                height: auto;
+                min-height: calc((100vw - 40px) * 9 / 16);
+                padding: 40px;
+            }
+            .slide-header { left: 40px; right: 40px; }
+            h1 { font-size: 42px; }
+            h2 { font-size: 32px; }
+            .two-column, .product-grid, .role-list {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .comparison {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .vs-divider { display: none; }
+            .product-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+            div[style*="grid-template-columns: repeat(3, 1fr)"] {
+                grid-template-columns: 1fr;
+            }
+            div[style*="grid-template-columns: 280px 350px 280px"] {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            div[style*="position: absolute; right: 400px;"] {
+                position: static;
+                margin-top: 20px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1, [style*="font-size: 64px"] { font-size: 36px !important; }
+            h2, [style*="font-size: 48px"] { font-size: 28px !important; }
+            p[style*="font-size: 36px"] { font-size: 24px !important; }
+
+            .slide {
+                padding: 20px;
+                border: 1px dashed var(--border-gray);
+            }
+            .slide-header { left: 20px; right: 20px; top: 10px; padding-bottom: 10px;}
+
+            .nav-arrow { width: 40px; height: 40px; }
+            .nav-arrow.left { left: 10px; }
+            .nav-arrow.right { right: 10px; }
+
+            /* Org Chart font size adjustments */
+            [style*="padding: 20px 55px"] h4 { font-size: 20px !important; }
+            [style*="padding: 18px 45px"] h4 { font-size: 18px !important; }
+            [style*="padding: 16px 28px"] h4 { font-size: 16px !important; }
+            [style*="padding: 24px"] h4 { font-size: 20px !important; }
+            [style*="font-size: 17px"] { font-size: 15px !important; }
+        }
     </style>
 </head>
 <body>
@@ -385,10 +493,8 @@
                 <p style="font-size: 36px; color: var(--thy-red); font-weight: 600; letter-spacing: -0.5px;">Oryantasyon Sunumu</p>
             </div>
             
-            <!-- İsim altta -->
-            <div style="text-align: center;">
-                <p style="font-size: 16px; color: var(--dark-gray); font-weight: 400; opacity: 0.7;">Değer Canıbek, Delivery Lead</p>
-            </div>
+            <!-- Boş alan altta (slide 1 ile simetri için) -->
+            <div style="height: 60px;"></div>
         </div>
     </div>
 
@@ -758,9 +864,13 @@
         </div>
     </div>
 
-    <!-- Navigation Areas -->
-    <div class="navigation-area nav-left" onclick="previousSlide()"></div>
-    <div class="navigation-area nav-right" onclick="nextSlide()"></div>
+    <!-- Navigation Arrows -->
+    <div class="nav-arrow left" onclick="previousSlide()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </div>
+    <div class="nav-arrow right" onclick="nextSlide()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
+    </div>
 
     <script>
         let currentSlide = 0;
