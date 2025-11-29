@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lojistik Ürün Geliştirme Direktörlüğü - Oryantasyon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --thy-red: #E81932;
+            --thy-dark-red: #C4162D;
+            --dark-gray: #2C3E50;
+            --light-gray: #F8F9FA;
+            --text-dark: #333;
+            --border-gray: #CCCCCC;
+        }
+
+        body {
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: white;
+            color: var(--text-dark);
+            overflow: hidden;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .slide {
+            width: calc(100vw - 80px);
+            height: calc((100vw - 80px) * 9 / 16);
+            max-width: 1600px;
+            max-height: 900px;
+            margin: 0 auto;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+            position: relative;
+            background: white;
+            border: 2px dashed var(--border-gray);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background-image: url('logo_dark.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.03;
+            z-index: 0;
+        }
+
+        .slide > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide-header {
+            position: absolute;
+            top: 20px;
+            left: 60px;
+            right: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--thy-red);
+        }
+
+        .slide-number {
+            font-size: 18px;
+            color: var(--thy-red);
+            font-weight: 600;
+        }
+
+        .slide-logo {
+            font-size: 14px;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        .slide-logo img {
+            height: 24px;
+        }
+
+        h1 {
+            font-size: 54px;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 42px;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 28px;
+            color: var(--thy-red);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 32px;
+            color: var(--dark-gray);
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            border-left: 5px solid var(--thy-red);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .card h4 {
+            font-size: 28px;
+            color: var(--thy-red);
+            margin-bottom: 15px;
+        }
+
+        .card p, .card ul {
+            font-size: 20px;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        .card ul {
+            padding-left: 25px;
+        }
+
+        .card li {
+            margin-bottom: 10px;
+        }
+
+        .big-text {
+            font-size: 48px;
+            line-height: 1.5;
+            color: var(--text-dark);
+        }
+
+        .highlight {
+            color: var(--thy-red);
+            font-weight: 600;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border: 2px solid var(--thy-red);
+            padding: 35px;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(232, 25, 50, 0.2);
+        }
+
+        .product-card h4 {
+            font-size: 32px;
+            color: var(--thy-red);
+            margin-bottom: 15px;
+        }
+
+        .product-card .tagline {
+            font-size: 18px;
+            font-style: italic;
+            color: var(--dark-gray);
+            margin-bottom: 15px;
+        }
+
+        .product-card p {
+            font-size: 20px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        .product-card a {
+            font-size: 14px;
+            color: var(--thy-red);
+            text-decoration: none;
+            border-bottom: 1px solid var(--thy-red);
+        }
+
+        .vs-box {
+            background: var(--light-gray);
+            padding: 40px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .comparison-item {
+            text-align: center;
+        }
+
+        .comparison-item h4 {
+            font-size: 36px;
+            color: var(--thy-red);
+            margin-bottom: 20px;
+        }
+
+        .comparison-item p {
+            font-size: 22px;
+            line-height: 1.6;
+        }
+
+        .vs-divider {
+            font-size: 48px;
+            color: var(--thy-red);
+            font-weight: 700;
+        }
+
+        .role-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .role-item {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            padding: 20px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            border-left: 4px solid var(--thy-red);
+        }
+
+        .role-item::before {
+            content: "▸";
+            color: var(--thy-red);
+            font-size: 28px;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        button {
+            background: var(--thy-red);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: var(--thy-dark-red);
+        }
+
+        .portfolio-overview {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .portfolio-item {
+            flex: 1;
+        }
+
+        .portfolio-number {
+            font-size: 72px;
+            color: var(--thy-red);
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .portfolio-label {
+            font-size: 24px;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        ul.feature-list {
+            font-size: 24px;
+            line-height: 2;
+            list-style: none;
+        }
+
+        ul.feature-list li::before {
+            content: "✓";
+            color: var(--thy-red);
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .center-content {
+            text-align: center;
+        }
+
+        .navigation-area {
+            position: fixed;
+            top: 0;
+            height: 100vh;
+            cursor: pointer;
+            z-index: 2000;
+            background: transparent;
+        }
+
+        .nav-left {
+            left: 0;
+            width: calc((100vw - min(1600px, 100vw - 80px)) / 2 + 40px);
+        }
+
+        .nav-right {
+            right: 0;
+            width: calc((100vw - min(1600px, 100vw - 80px)) / 2 + 40px);
+        }
+
+        .nav-left:hover, .nav-right:hover {
+            background: rgba(0,0,0,0.02);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Kapak -->
+    <div class="slide active">
+        <div class="content center-content" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding-top: 40px; padding-bottom: 40px;">
+            <!-- Logo üstte -->
+            <div style="margin-top: 20px;">
+                <img src="logo_dark.svg" alt="Turkish Technology" style="height: 60px;">
+            </div>
+            
+            <!-- Ana içerik ortada -->
+            <div style="text-align: center;">
+                <h1 style="font-size: 64px; color: var(--text-dark); margin-bottom: 30px; font-weight: 800; letter-spacing: -1px; line-height: 0.95;">Lojistik Ürün Direktörlüğü</h1>
+                <p style="font-size: 36px; color: var(--thy-red); font-weight: 600; letter-spacing: -0.5px;">Oryantasyon Sunumu</p>
+            </div>
+            
+            <!-- Tarih ve isim altta -->
+            <div style="text-align: center;">
+                <p style="font-size: 18px; color: var(--dark-gray); margin-bottom: 6px; font-weight: 500;">3 Kasım 2025</p>
+                <p style="font-size: 16px; color: var(--dark-gray); font-weight: 400; opacity: 0.7;">Değer Canıbek, Delivery Lead</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Şirket Vizyonu ve Bizim Katkımız -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-number">01</div>
+            <div class="slide-logo">
+                <img src="logo_dark.svg" alt="Turkish Technology">
+            </div>
+        </div>
+        <div class="content">
+            <h2 style="font-size: 48px; margin-bottom: 50px; color: var(--text-dark); text-align: center; font-weight: 700;">Şirket Vizyonu ve Lojistik Ürün Direktörlüğü</h2>
+            
+            <!-- Turkish Technology -->
+            <div style="background: var(--light-gray); padding: 40px; border-radius: 12px; margin-bottom: 40px; border-left: 4px solid var(--thy-red);">
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <img src="logo_dark.svg" alt="Turkish Technology" style="height: 40px;">
+                </div>
+                
+                <div class="two-column" style="gap: 60px;">
+                    <!-- Vizyon -->
+                    <div>
+                        <h2 style="font-size: 32px; color: var(--text-dark); margin-bottom: 20px; font-weight: 700;">VİZYON</h2>
+                        <h3 style="font-size: 24px; color: var(--thy-red); margin-bottom: 20px; font-weight: 600;">Küresel bir teknoloji markası</h3>
+                        <p style="font-size: 18px; line-height: 1.6; color: var(--text-dark);">
+                            Önümüzdeki beş yıl içinde havacılık teknolojileri sektöründe dünyanın en iyi on şirketinden biri olmak ve bu alanda mükemmellikte küresel bir üne sahip olmak.
+                        </p>
+                    </div>
+                    
+                    <!-- Misyon -->
+                    <div>
+                        <h2 style="font-size: 32px; color: var(--text-dark); margin-bottom: 20px; font-weight: 700;">MİSYON</h2>
+                        <h3 style="font-size: 24px; color: var(--thy-red); margin-bottom: 20px; font-weight: 600;">Teknolojik ihtiyaçlar için uçtan uca çözüm</h3>
+                        <p style="font-size: 18px; line-height: 1.6; color: var(--text-dark);">
+                            Havacılık sektörünün, özellikle Turkish Airlines ve iştiraklerinin tüm teknoloji ihtiyaçlarına kapsamlı çözümler ve destek sunmak. Ar-Ge ile geliştirilen teknolojileri dünyaya ihraç etmek.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hedefimiz -->
+            <div style="display: flex; align-items: center; justify-content: center; background: var(--thy-red); color: white; padding: 40px; border-radius: 12px; min-height: 120px;">
+                <div style="text-align: center;">
+                    <h3 style="font-size: 32px; margin-bottom: 25px; font-weight: 700; letter-spacing: 1px; color: white;">HEDEFİMİZ</h3>
+                    <p style="font-size: 24px; line-height: 1.5; font-weight: 500; margin-bottom: 0; color: white;">
+                        Lojistik çözümlerimizi <strong style="font-weight: 700; color: white;">küresel ürünlere</strong> dönüştürmek ve havacılık lojistiğinin dijital geleceğini şekillendirmek
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Çözüm mü, Ürün mü? -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-number">03</div>
+            <div class="slide-logo">
+                <img src="logo_dark.svg" alt="Turkish Technology">
+            </div>
+        </div>
+                <div class="content">
+            <h2 style="font-size: 48px; margin-bottom: 40px; color: var(--text-dark); text-align: center; font-weight: 700;">Çözüm mü, Ürün mü?</h2>
+                                    <div class="vs-box">
+                <div class="comparison" style="align-items: flex-start;">
+                    <div class="comparison-item">
+                        <div style="position: relative; margin-bottom: -40px; z-index: 0;">
+                            <div style="position: relative; display: inline-block;">
+                                <img src="custom_tailored.png" alt="Custom Tailored" style="width: 280px; height: 200px; object-fit: cover; border-radius: 12px; box-shadow: 0 8px 24px rgba(232, 25, 50, 0.3); transform: rotate(-2deg); border: 4px solid white; opacity: 0.95;">
+                                <div style="position: absolute; top: -15px; right: -15px; background: var(--thy-red); color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 700; box-shadow: 0 4px 12px rgba(232, 25, 50, 0.4);">ÖZEL</div>
+                            </div>
+                        </div>
+                        <h4 style="margin-top: 20px; position: relative; z-index: 1; background: var(--light-gray); display: inline-block; padding: 10px 20px; border-radius: 8px;">ÇÖZÜM</h4>
+                        <p>Belirli bir müşteri ihtiyacı için özel geliştirilmiş yazılım</p>
+                        <p style="margin-top: 20px; font-size: 18px; color: var(--dark-gray);">
+                            • Tek müşteri odaklı<br>
+                            • Özelleştirilmiş geliştirme<br>
+                            • Proje bazlı<br>
+                            • On-premise deployment
+                        </p>
+                    </div>
+                    <div class="vs-divider" style="align-self: flex-start; margin-top: 180px;">→</div>
+                    <div class="comparison-item">
+                        <div style="position: relative; margin-bottom: -40px; z-index: 0;">
+                            <div style="position: relative; display: inline-block;">
+                                <img src="off_the_rack.png" alt="Off The Rack" style="width: 280px; height: 200px; object-fit: cover; border-radius: 12px; box-shadow: 0 8px 24px rgba(232, 25, 50, 0.3); transform: rotate(2deg); border: 4px solid white; opacity: 0.95;">
+                                <div style="position: absolute; top: -15px; right: -15px; background: var(--thy-red); color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 700; box-shadow: 0 4px 12px rgba(232, 25, 50, 0.4);">HAZIR</div>
+                            </div>
+                        </div>
+                        <h4 style="margin-top: 20px; position: relative; z-index: 1; background: var(--light-gray); display: inline-block; padding: 10px 20px; border-radius: 8px;">ÜRÜN</h4>
+                        <p>Çok müşteriye satılabilen, ölçeklenebilir platform</p>
+                        <p style="margin-top: 20px; font-size: 18px; color: var(--dark-gray);">
+                            • Multi-tenant<br>
+                            • Standart özellikler<br>
+                            • Sürekli geliştirme<br>
+                            • Cloud-native<br>
+                            • Multi-language support<br>
+                            • Product lifecycle management
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Ürün Portföyümüz -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-number">04</div>
+            <div class="slide-logo">
+                <img src="logo_dark.svg" alt="Turkish Technology">
+            </div>
+        </div>
+        <div class="content">
+            <h2 style="font-size: 48px; margin-bottom: 40px; color: var(--text-dark); text-align: center; font-weight: 700;">Ürün Portföyümüz</h2>
+            
+            <div class="product-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 35px; margin-top: 30px;">
+                <!-- Navipar - Canlı Ürün -->
+                <div class="product-card" style="background: linear-gradient(135deg, var(--thy-red), var(--thy-dark-red)); color: white; border: none; position: relative; overflow: hidden;">
+                    <div style="position: relative; z-index: 2;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                            <div style="background: white; padding: 8px 16px; border-radius: 8px; display: inline-block;">
+                                <img src="navipar_logo.svg" alt="Navipar" style="height: 28px; display: block;">
+                            </div>
+                            <span style="background: rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; backdrop-filter: blur(10px);">CANLI ÜRÜN</span>
+                        </div>
+                        <p class="tagline" style="color: rgba(255,255,255,0.95); margin-bottom: 15px; font-weight: 500;">"Your autopilot for cross-border logistics"</p>
+                        <p style="color: white; font-size: 18px; margin-bottom: 15px;">Sınır ötesi lojistik süreçlerini otomatikleştiren cloud-native, multi-tenant SaaS platformu. 2025 Nisan'da canlıya alındı.</p>
+                        <a href="https://turkishtechnology.com/tr/products/cargo-and-logistics/navipar" style="color: white; border-bottom-color: white; font-weight: 600;">Daha fazla bilgi →</a>
+                    </div>
+                </div>
+
+                <!-- Sungur - Geliştirme Aşamasında -->
+                <div class="product-card" style="background: linear-gradient(135deg, var(--dark-gray), var(--dark-gray)); color: white; border: none; position: relative; overflow: hidden;">
+                    <div style="position: relative; z-index: 2;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                            <h4 style="font-size: 28px; margin: 0; color: white;">Sungur</h4>
+                            <span style="background: rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; backdrop-filter: blur(10px);">GELİŞTİRİLİYOR</span>
+                        </div>
+                        <p class="tagline" style="color: rgba(255,255,255,0.95); margin-bottom: 15px; font-weight: 500;">Kargo Yönetim Sistemi (TMS)</p>
+                        <p style="color: white; font-size: 18px; margin-bottom: 15px;">Turkish Cargo'nun operasyonlarını uçtan uca yöneteceği yeni nesil TMS. Tüm kargo süreçlerini dijitalleştiren kapsamlı platform.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- İkinci satır - 3 ürün yan yana -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 30px;">
+                <!-- Turnaround AI -->
+                <div class="product-card" style="background: white; border: 2px solid var(--thy-red); position: relative; overflow: hidden;">
+                    <div style="position: absolute; inset: 0; background: url('turnarounf_ai.png'); background-size: cover; background-position: center; opacity: 0.4; z-index: 1;"></div>
+                    <div style="position: relative; z-index: 2;">
+                        <h4 style="color: var(--thy-red);">Turnaround AI</h4>
+                        <p style="font-size: 18px; margin-bottom: 15px;">Uçak yer operasyonlarında yapay zeka destekli optimizasyon platformu. Gerçek zamanlı izleme ve tahminleme ile operasyonel verimliliği artırır.</p>
+                        <a href="https://turkishtechnology.com/tr/products/flight-operations/turnaround-ai">Daha fazla bilgi →</a>
+                    </div>
+                </div>
+
+                <!-- Weight & Balance -->
+                <div class="product-card" style="background: white; border: 2px solid var(--thy-red); position: relative; overflow: hidden;">
+                    <div style="position: absolute; inset: 0; background: url('weight_balance.png'); background-size: cover; background-position: center; opacity: 0.4; z-index: 1;"></div>
+                    <div style="position: relative; z-index: 2;">
+                        <h4 style="color: var(--thy-red);">Weight & Balance</h4>
+                        <p style="font-size: 18px; margin-bottom: 15px;">Uçak ağırlık ve denge hesaplama sistemi. Güvenli ve optimize edilmiş yükleme süreçleri için kritik hesaplamalar yapan platform.</p>
+                        <a href="https://turkishtechnology.com/tr/products/cargo-and-logistics/weight-balance">Daha fazla bilgi →</a>
+                    </div>
+                </div>
+
+                <!-- Bag Globe -->
+                <div class="product-card" style="background: white; border: 2px solid var(--thy-red); position: relative; overflow: hidden;">
+                    <div style="position: absolute; inset: 0; background: url('bag_globe.png'); background-size: cover; background-position: center; opacity: 0.4; z-index: 1;"></div>
+                    <div style="position: relative; z-index: 2;">
+                        <h4 style="color: var(--thy-red);">Bag Globe</h4>
+                        <p style="font-size: 18px; margin-bottom: 15px;">Uçtan uca bagaj takip ve yönetim sistemi. RFID teknolojisi ile kayıp bagaj oranlarını minimize eden akıllı çözüm.</p>
+                        <a href="https://turkishtechnology.com/tr/products/flight-operations/bag-globe">Daha fazla bilgi →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Organizasyon Yapımız -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-number">02</div>
+            <div class="slide-logo">
+                <img src="logo_dark.svg" alt="Turkish Technology">
+            </div>
+        </div>
+        <div class="content">
+            <h2 style="font-size: 48px; margin-bottom: 40px; color: var(--text-dark); text-align: center; font-weight: 700;">Organizasyon Yapımız</h2>
+            
+            <!-- Model Açıklaması -->
+            <div style="text-align: center; margin-bottom: 40px;">
+                <p style="font-size: 28px; color: var(--text-dark); font-weight: 600;">
+                    <span style="color: var(--thy-red); font-weight: 700;">SAFe</span> + 
+                    <span style="color: var(--thy-red); font-weight: 700;">Spotify Model</span> 
+                    Hibrit Yapı
+                </p>
+            </div>
+
+            <!-- Organizasyon Şeması -->
+            <div style="margin-bottom: 40px;">
+                
+                <!-- Tribe Lead (En üstte ortada) -->
+                <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                    <div style="background: var(--thy-red); color: white; padding: 20px 55px; border-radius: 12px; text-align: center;">
+                        <h4 style="font-size: 24px; font-weight: 700; margin-bottom: 6px;">Tribe Lead</h4>
+                        <p style="font-size: 15px; opacity: 0.9;">(Direktör)</p>
+                    </div>
+                </div>
+
+                <!-- İkinci seviye - Stream Lead ortada, Product Managers sağda -->
+                <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 40px; position: relative;">
+                    <!-- Stream Lead (Ortada) -->
+                    <div style="background: var(--dark-gray); color: white; padding: 18px 45px; border-radius: 12px; text-align: center;">
+                        <h4 style="font-size: 22px; font-weight: 700; margin-bottom: 6px;">Stream Lead</h4>
+                        <p style="font-size: 15px; opacity: 0.9;">(Müdür)</p>
+                    </div>
+                    
+                    <!-- Product Managers (Sağda, aynı hizada) -->
+                    <div style="position: absolute; right: 400px; top: -50px">
+                        <div style="background: #6C7B7F; color: white; padding: 16px 28px; border-radius: 10px; text-align: center; font-size: 14px;">
+                            <h4 style="font-size: 18px; font-weight: 700; margin-bottom: 4px;">Product Managers</h4>
+                            <p style="font-size: 13px; opacity: 0.9;">Works with Tribe Lead</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alt seviye - 3 Lead yan yana (Engineering Lead daha geniş) -->
+                <div style="display: grid; grid-template-columns: 280px 350px 280px; gap: 45px; justify-content: center;">
+                    
+                    <!-- Product Lead -->
+                    <div style="background: var(--light-gray); padding: 24px; border-radius: 12px; border-left: 4px solid var(--thy-red);">
+                        <h4 style="font-size: 22px; font-weight: 700; margin-bottom: 18px; color: var(--thy-red); text-align: center;">Product Lead</h4>
+                        <div style="font-size: 17px; line-height: 1.7; color: var(--text-dark);">
+                            • Product Owners<br>
+                            • Product Analysts<br>
+                            • Product Designer (UX/UI)
+                        </div>
+                    </div>
+
+                    <!-- Engineering Lead -->
+                    <div style="background: var(--light-gray); padding: 24px; border-radius: 12px; border-left: 4px solid var(--thy-red);">
+                        <h4 style="font-size: 22px; font-weight: 700; margin-bottom: 18px; color: var(--thy-red); text-align: center;">Engineering Lead</h4>
+                        <div style="font-size: 17px; line-height: 1.7; color: var(--text-dark);">
+                            • Backend & Frontend Developers<br>
+                            • QA Engineers<br>
+                            • Architects (SW, AI, Data, Security)<br>
+                            • AI Specialists
+                        </div>
+                    </div>
+
+                    <!-- Delivery Lead -->
+                    <div style="background: var(--light-gray); padding: 24px; border-radius: 12px; border-left: 4px solid var(--thy-red);">
+                        <h4 style="font-size: 22px; font-weight: 700; margin-bottom: 18px; color: var(--thy-red); text-align: center;">Delivery Lead</h4>
+                        <div style="font-size: 17px; line-height: 1.7; color: var(--text-dark);">
+                            • Agile Masters
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Teknoloji -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-number">05</div>
+            <div class="slide-logo">
+                <img src="logo_dark.svg" alt="Turkish Technology">
+            </div>
+        </div>
+        <div class="content">
+            <h2 style="font-size: 48px; margin-bottom: 30px; color: var(--text-dark); text-align: center; font-weight: 700;">Teknoloji Yaklaşımımız</h2>
+            
+            <!-- Ana Grid - 3x3 -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; max-width: 1400px; margin: 20px auto;">
+                
+                <!-- Cloud-Native -->
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px; border-radius: 12px; text-align: center; color: white; position: relative; overflow: hidden;">
+                    <div style="font-size: 42px; margin-bottom: 10px;">☁️</div>
+                    <h4 style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: white;">Cloud-Native</h4>
+                    <p style="font-size: 14px; line-height: 1.4; opacity: 0.95;">Ölçeklenebilir ve esnek bulut altyapısı</p>
+                </div>
+
+                <!-- Multi-Tenant -->
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 25px; border-radius: 12px; text-align: center; color: white; position: relative; overflow: hidden;">
+                    <div style="font-size: 42px; margin-bottom: 10px;">🏢</div>
+                    <h4 style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: white;">Multi-Tenant</h4>
+                    <p style="font-size: 14px; line-height: 1.4; opacity: 0.95;">Çok müşteriye hizmet veren mimari</p>
+                </div>
+
+                <!-- AI-First -->
+                <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 25px; border-radius: 12px; text-align: center; color: white; position: relative; overflow: hidden;">
+                    <div style="font-size: 42px; margin-bottom: 10px;">🤖</div>
+                    <h4 style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: white;">AI-First</h4>
+                    <p style="font-size: 14px; line-height: 1.4; opacity: 0.95;">Yapay zeka odaklı ürün geliştirme</p>
+                </div>
+
+                <!-- Microservices -->
+                <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); padding: 25px; border-radius: 12px; text-align: center; color: white; position: relative; overflow: hidden;">
+                    <div style="font-size: 42px; margin-bottom: 10px;">🔧</div>
+                    <h4 style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: white;">Mikroservis</h4>
+                    <p style="font-size: 14px; line-height: 1.4; opacity: 0.95;">Modüler ve bağımsız servisler</p>
+                </div>
+
+                <!-- Agile & SAFe -->
+                <div style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); padding: 25px; border-radius: 12px; text-align: center; color: white; position: relative; overflow: hidden;">
+                    <div style="font-size: 42px; margin-bottom: 10px;">⚡</div>
+                    <h4 style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: white;">Agile & SAFe</h4>
+                    <p style="font-size: 14px; line-height: 1.4; opacity: 0.95;">Çevik metodolojiler ve hızlı teslimat</p>
+                </div>
+
+                <!-- CI/CD - GitHub Actions -->
+                <div style="background: linear-gradient(135deg, #24292e 0%, #40464d 100%); padding: 25px; border-radius: 12px; text-align: center; color: white; position: relative; overflow: hidden;">
+                    <div style="font-size: 42px; margin-bottom: 10px;">🔄</div>
+                    <h4 style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: white;">CI/CD Pipeline</h4>
+                    <p style="font-size: 14px; line-height: 1.4; opacity: 0.95;">GitHub Actions ile sürekli entegrasyon</p>
+                </div>
+
+                <!-- Multi-Language -->
+                <div style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); padding: 25px; border-radius: 12px; text-align: center; color: var(--dark-gray); position: relative; overflow: hidden;">
+                    <div style="font-size: 42px; margin-bottom: 10px;">🌍</div>
+                    <h4 style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--dark-gray);">Multi-Language</h4>
+                    <p style="font-size: 14px; line-height: 1.4; opacity: 0.9;">Çok dilli platform desteği</p>
+                </div>
+
+                <!-- Test-Driven Development -->
+                <div style="background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%); padding: 25px; border-radius: 12px; text-align: center; color: white; position: relative; overflow: hidden;">
+                    <div style="font-size: 42px; margin-bottom: 10px;">✅</div>
+                    <h4 style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: white;">Test-Driven Dev</h4>
+                    <p style="font-size: 14px; line-height: 1.4; opacity: 0.95;">Kalite odaklı test süreçleri</p>
+                </div>
+
+                <!-- Event-Driven Architecture -->
+                <div style="background: linear-gradient(135deg, #ff6e7f 0%, #bfe9ff 100%); padding: 25px; border-radius: 12px; text-align: center; color: white; position: relative; overflow: hidden;">
+                    <div style="font-size: 42px; margin-bottom: 10px;">⚙️</div>
+                    <h4 style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: white;">Event-Driven</h4>
+                    <p style="font-size: 14px; line-height: 1.4; opacity: 0.95;">Olay tabanlı mimari yapı</p>
+                </div>
+
+            </div>
+
+            <p class="big-text" style="font-size: 24px; margin-top: 30px; text-align: center;">
+                <span class="highlight">Modern tech stack</span> ile kargo sektöründeki <span class="highlight">AI-first</span> ürünleri Turkish Technology markasıyla pazara sunuyoruz
+            </p>
+        </div>
+    </div>
+
+    <!-- Slide 7: Teşekkür & Soru-Cevap -->
+    <div class="slide">
+        <div class="content center-content" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding-top: 40px; padding-bottom: 40px;">
+            <!-- Logo üstte -->
+            <div style="margin-top: 20px;">
+                <img src="logo_dark.svg" alt="Turkish Technology" style="height: 60px;">
+            </div>
+            
+            <!-- Ana içerik ortada -->
+            <div style="text-align: center;">
+                <h1 style="font-size: 64px; color: var(--text-dark); margin-bottom: 30px; font-weight: 800; letter-spacing: -1px; line-height: 0.95;">Soru & Cevap</h1>
+                <p style="font-size: 36px; color: var(--thy-red); font-weight: 600; letter-spacing: -0.5px;">Teşekkürler</p>
+            </div>
+            
+            <!-- Boş alan altta (slide 1 ile simetri için) -->
+            <div style="height: 60px;"></div>
+        </div>
+    </div>
+
+    <!-- Navigation Areas -->
+    <div class="navigation-area nav-left" onclick="previousSlide()"></div>
+    <div class="navigation-area nav-right" onclick="nextSlide()"></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Klavye kontrolleri
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+    </script>
+
+</body>
+</html>
